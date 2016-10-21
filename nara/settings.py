@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'nara_backend',
 ]
 
 MIDDLEWARE = [
@@ -78,8 +79,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'nara',
         'USER': 'backend',
+        'PASSWORD': 'somepassword',
         'HOST': 'localhost',
-        'PORT': 32772,
+        'PORT': 5432,
     }
 }
 
