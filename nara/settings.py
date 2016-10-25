@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'nara_backend',
     'rest_framework',
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -86,11 +87,20 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'nara',
         'USER': 'backend',
-        'PASSWORD': '',
+        'PASSWORD': 'test',
         'HOST': 'localhost',
         'PORT': 5432,
     }
 }
+
+# Channels
+
+CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'asgiref.inmemory.ChannelLayer',
+            'ROUTING': 'django_channels.routing.channel_routing',
+            },
+        }
 
 
 # Password validation
