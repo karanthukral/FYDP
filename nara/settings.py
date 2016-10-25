@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'nara_backend',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +51,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+        'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.AllowAny'],
+        'PAGE_SIZE': 10
+        }
 
 ROOT_URLCONF = 'nara.urls'
 
@@ -79,7 +86,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'nara',
         'USER': 'backend',
-        'PASSWORD': 'somepassword',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': 5432,
     }
