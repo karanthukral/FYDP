@@ -13,7 +13,7 @@ class domain_classifier:
 
     def __init__(self):
 
-        self.DATA_DIR = "data"
+        self.DATA_DIR = "../data"
         self.CKPT_DIR = path.join(self.DATA_DIR, "ckpt")
         if not os.path.exists(self.CKPT_DIR):
             os.makedirs(self.CKPT_DIR)
