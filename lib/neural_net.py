@@ -1,5 +1,4 @@
 import itertools
-import math
 from os import path
 
 from ngram import NGram
@@ -91,7 +90,8 @@ class domain_classifier:
         self.train_step = tf.train.AdamOptimizer().minimize(cross_entropy)
 
     def evaluate_success(self):
-        correct_prediction = tf.equal(tf.argmax(self.y, 1), tf.argmax(self.y_, 1))
+        correct_prediction = tf.equal(tf.argmax(self.y, 1),
+                                      tf.argmax(self.y_, 1))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
         return self.sess.run(accuracy, feed_dict={
                 self.x: self._str2ngram(self.data.test.domains),
@@ -116,7 +116,8 @@ class domain_classifier:
                         self.x: self._str2ngram(batch_xs),
                         self.y_: batch_ys
                     })
-            print("Epoch: " + str(i+1) + ": " + str(self.evaluate_success()) + "%")
+            print("Epoch: " + str(i+1) + ": "
+                  + str(self.evaluate_success()) + "%")
 
 
 # Data vomiterer
@@ -130,7 +131,8 @@ class data_vomit():
                 self.labels = []
 
         self.test = testing()
-        self.data_feed = np.array([[d, 1] for d in good_domains] + [[d, 0] for d in bad_domains])
+        self.data_feed = np.array([[d, 1] for d in good_domains] +
+                                  [[d, 0] for d in bad_domains])
         np.random.shuffle(self.data_feed)
         self.X_train, self.test.domains, self.y_train, self.test.labels = train_test_split(self.data_feed[:, 0], self.data_feed[:, 1], test_size=0.03)
 
@@ -153,7 +155,9 @@ class data_vomit():
                 self.loc = (self.loc + n) % self.total_data
                 return x, y
             else:
-                x = np.append(self.X_train[self.loc:self.total_data], self.X_train[0:n-self.total_data+self.loc])
-                y = np.append(self.y_train[self.loc:self.total_data], self.y_train[0:n-self.total_data+self.loc])
+                x = np.append(self.X_train[self.loc:self.total_data],
+                              self.X_train[0:n-self.total_data+self.loc])
+                y = np.append(self.y_train[self.loc:self.total_data],
+                              self.y_train[0:n-self.total_data+self.loc])
                 self.loc = n-self.total_data+self.loc
                 return x, y
