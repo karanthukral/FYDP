@@ -1,5 +1,6 @@
 import itertools
 from os import path
+import os
 
 from ngram import NGram
 import numpy as np
@@ -14,12 +15,14 @@ class domain_classifier:
 
         self.DATA_DIR = "data"
         self.CKPT_DIR = path.join(self.DATA_DIR, "ckpt")
+        if not os.path.exists(self.CKPT_DIR):
+            os.makedirs(self.CKPT_DIR)
         bro_file = path.join(self.DATA_DIR, "bro.dat")
         good_urls_file = path.join(self.DATA_DIR, "top-1m.csv")
 
         DOMAIN_STR = 'Intel::DOMAIN'
 
-        NGRAM_N = 3
+        NGRAM_N = 2
         MAX_DOMAINS = 50000
 
         self.bad_domains = []
@@ -105,8 +108,8 @@ class domain_classifier:
             })[0]
 
     def train(self):
-        NUM_EPOCHS = 10
-        MINIBATCH_SIZE = 200
+        NUM_EPOCHS = 50
+        MINIBATCH_SIZE = 100
 
         saver = tf.train.Saver()
 
