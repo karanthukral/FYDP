@@ -3,3 +3,4 @@ data/bro.dat
 venv/
 
 *.pyc
+.DS_Store
