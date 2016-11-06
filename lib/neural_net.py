@@ -12,9 +12,10 @@ class domain_classifier:
 
     def __init__(self):
 
-        DATA_DIR = "data"
-        bro_file = path.join(DATA_DIR, "bro.dat")
-        good_urls_file = path.join(DATA_DIR, "top-1m.csv")
+        self.DATA_DIR = "data"
+        self.CKPT_DIR = path.join(self.DATA_DIR, "ckpt")
+        bro_file = path.join(self.DATA_DIR, "bro.dat")
+        good_urls_file = path.join(self.DATA_DIR, "top-1m.csv")
 
         DOMAIN_STR = 'Intel::DOMAIN'
 
@@ -104,8 +105,10 @@ class domain_classifier:
             })[0]
 
     def train(self):
-        NUM_EPOCHS = 1
+        NUM_EPOCHS = 10
         MINIBATCH_SIZE = 200
+
+        saver = tf.train.Saver()
 
         tf.initialize_all_variables().run()
 
@@ -119,6 +122,15 @@ class domain_classifier:
             print("Epoch: " + str(i+1) + ": "
                   + str(self.evaluate_success()) + "%")
 
+            saver.save(self.sess,
+                       path.join(self.CKPT_DIR, "model.ckpt"),
+                       global_step=i+1)
+
+    def load_model(self):
+        saver = tf.train.Saver()
+        ckpt = tf.train.get_checkpoint_state(self.CKPT_DIR)
+        if ckpt and ckpt.model_checkpoint_path:
+            saver.restore(self.sess, ckpt.model_checkpoint_path)
 
 # Data vomiterer
 class data_vomit():
