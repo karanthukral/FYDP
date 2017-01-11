@@ -2,6 +2,7 @@ data/bro.dat
 *.ipynb_checkpoints/
 venv/
 data/ckpt/
+local_data/
 
 *.pyc
 .DS_Store
