@@ -23,12 +23,14 @@ if TRAIN:
 else:
     nn.load_model()
 
+ITEMS_PER_PAGE = 20
+
 @app.route('/')
 def hello():
     return "Hello World!"
 
-@app.route('/api/v1.0/traffic/list', methods=['GET'])
-def get_tasks():
+@app.route('/api/v1.0/traffic/list/<int:page>', methods=['GET'])
+def get_tasks(page=1):
     if request.method == "GET":
         min_created_at = request.args.get('min_created_at')
         if min_created_at == None:
@@ -36,9 +38,12 @@ def get_tasks():
         else:
             created_after = datetime.strptime(min_created_at, "%Y-%m-%d %H:%M:%S")
 
-        traffic = Traffic.query.filter(Traffic.created_at > created_after).order_by(Traffic.created_at)
+        traffic = Traffic.query.filter(Traffic.created_at >
+                created_after).order_by(Traffic.created_at).paginate(page,
+                        ITEMS_PER_PAGE, False)
 
-        return jsonify(traffic_objs=[t.serialize for t in traffic.all()])
+
+        return jsonify(traffic_objs=[t.serialize for t in traffic.items])
     else:
         return "You done goofed"
 
