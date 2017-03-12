@@ -5,7 +5,8 @@ from flask_migrate import Migrate, MigrateCommand
 from app import app, db
 
 
-app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://inara@localhost:5432/inara'
+
 
 migrate = Migrate(app, db)
 manager = Manager(app)

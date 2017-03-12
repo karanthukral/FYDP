@@ -15,8 +15,8 @@ class Traffic(db.Model):
     updated_at = db.Column(db.DateTime)
 
     # Source Details
-    total_src_bytes = db.Column(db.Integer)
-    total_src_pkts = db.Column(db.Integer)
+    total_src_bytes = db.Column(db.String)
+    total_src_pkts = db.Column(db.String)
     src_b64_payload = db.Column(db.String)
     src_utf_payload = db.Column(db.String)
     src_tcp_flags = db.Column(db.String)
@@ -24,8 +24,8 @@ class Traffic(db.Model):
     src_port = db.Column(db.String)
 
     # Destination Details
-    total_dst_bytes = db.Column(db.Integer)
-    total_dst_pkts = db.Column(db.Integer)
+    total_dst_bytes = db.Column(db.String)
+    total_dst_pkts = db.Column(db.String)
     dst_b64_payload = db.Column(db.String)
     dst_utf_payload = db.Column(db.String)
     dst_tcp_flags = db.Column(db.String)
@@ -35,8 +35,8 @@ class Traffic(db.Model):
     # Common Details
     app_name = db.Column(db.String)
     direction = db.Column(db.String)
-    start_time = db.Column(db.DateTime)
-    end_time = db.Column(db.DateTime)
+    start_time = db.Column(db.String)
+    end_time = db.Column(db.String)
     tag = db.Column(db.String)
 
     # ML Tag

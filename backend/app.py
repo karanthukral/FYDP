@@ -4,24 +4,14 @@ from datetime import datetime
 import sys
 import os
 
+sys.path.append('../')
+
 app = Flask(__name__)
-app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://inara@localhost:5432/inara'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-sys.path.append('../')
-
 from models.traffic import Traffic
-from lib import domain_classifier
-
-TRAIN = False
-
-nn = domain_classifier()
-
-if TRAIN:
-    nn.train()
-else:
-    nn.load_model()
 
 ITEMS_PER_PAGE = 20
 
