@@ -1,16 +1,22 @@
-import pickle, os, random, time
-from datetime import datetime
+import pickle
+import os
+import random
+import time
 
+from datetime import datetime
 import psycopg2
 import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
 DATA_DIR = 'local_data/features/'
 
+
 def setup_db():
     print('Connecting to DB...')
-    conn = psycopg2.connect(host="localhost",database="inara", user="inara", password="")
+    conn = psycopg2.connect(host="localhost",
+                            database="inara",
+                            user="inara",
+                            password="")
     cursor = conn.cursor()
 
     print('Printing Version')
@@ -18,9 +24,9 @@ def setup_db():
 
     # display the PostgreSQL database server version
     db_version = cursor.fetchone()
-    print(db_version)
-    print('DB Ready')
+    print('DB Ready, v{}'.format(db_version))
     return cursor
+
 
 def insert(cursor, values):
     # Insert statement
@@ -31,6 +37,7 @@ dst_port, app_name, direction, start_time, end_time, tag, classified_tag,
 created_at, updated_at) VALUES(%s) RETURNING id;"""
     cursor.execute(sql, values)
 
+
 def make_model():
 
     print('Beginning model training...')
@@ -39,33 +46,33 @@ def make_model():
     y = np.load(os.path.join(DATA_DIR, 'labels-new.npy'))[0]
 
     clf = RandomForestClassifier(n_estimators=25, n_jobs=-1)
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
-
-    # Fit the model
-    clf.fit(X_train, y_train)
-    print('Model training done, took ' + str(time.time()-start) + ' seconds')
+    clf.fit(X, y)
+    print('Model training done, took {} seconds'.format(time.time()-start))
     return [clf, X]
+
 
 def classify(clf, data):
     return clf.predict(data)
 
+
 def iterate(clf, X, cursor):
-    full_db_data = pickle.load(open(os.path.join(DATA_DIR,'flow-for-db.pkl'),'rb'))
+    full_db_data = pickle.load(
+        open(os.path.join(DATA_DIR, 'flow-for-db.pkl'), 'rb'))
     for idx, data in enumerate(X):
         tag = classify(clf, [data])
         db_datum = full_db_data[idx]
         db_datum.append(tag)
-        db_datum.append([datetime.now().strftime("%Y-%m-%d"), datetime.now().strftime("%H:%M:%S")])
-        db_datum.append([datetime.now().strftime("%Y-%m-%d"), datetime.now().strftime("%H:%M:%S")])
-        print("Inserting " + str(db_datum))
+        dtn = datetime.now()
+        db_datum.append([dtn.strftime("%Y-%m-%d"), dtn.strftime("%H:%M:%S")])
+        db_datum.append([dtn.strftime("%Y-%m-%d"), dtn.strftime("%H:%M:%S")])
+        print("Inserting {}".format(db_datum))
         insert(cursor, db_datum)
-        time.sleep(random.random())
+        time.sleep(random.random())  # wait a random amount of time t: 0<t<1s
+
 
 if __name__ == "__main__":
     cursor = setup_db()
     clf, X = make_model()
     iterate(clf, X, cursor)
-
     # close connection
     cursor.close()
