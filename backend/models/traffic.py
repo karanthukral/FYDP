@@ -73,8 +73,8 @@ class Traffic(db.Model):
                 'dst_port': self.dst_port,
                 'app_name': self.app_name,
                 'direction': self.direction,
-                'start_time': dump_datetime(self.start_time),
-                'end_time': dump_datetime(self.end_time),
+                'start_time': self.start_time,
+                'end_time': self.end_time,
                 'tag': self.tag,
                 'classified_tag': self.classified_tag,
         }

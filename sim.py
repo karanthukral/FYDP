@@ -38,7 +38,7 @@ def insert(cursor, values):
             'classified_tag', 'created_at', 'updated_at']
     cols = ', '.join(column_names)
     query = """ INSERT INTO %s(%s) VALUES(%%s, %%s,%%s, %%s,%%s, %%s,%%s,
-    %%s,%%s, %%s,%%s, %%s,%%s, %%s,%%s, %%s,%%s, %%s,%%s, %%s, now(), now()); """ % ('traffic', cols)
+    %%s,%%s, %%s,%%s, %%s,%%s, %%s,%%s, %%s,%%s, %%s,%%s, %%s, %%s, %%s); """ % ('traffic', cols)
     sql = """INSERT INTO traffic(total_src_bytes) VALUES(%s) RETURNING id;"""
     cursor.execute(query, values)
 
@@ -68,8 +68,8 @@ def iterate(clf, X, cursor, conn):
         db_datum = full_db_data[idx]
         db_datum.append(tag)
         dtn = str(datetime.now())
-        # db_datum.append(dtn)
-        # db_datum.append(dtn)
+        db_datum.append(dtn)
+        db_datum.append(dtn)
         db_datum = ['' if k == None else k for k in db_datum]
         print("Inserting {}".format(db_datum))
         insert(cursor, db_datum)
