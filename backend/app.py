@@ -22,6 +22,7 @@ def hello():
 @app.route('/api/v1.0/traffic/list/<int:page>', methods=['GET'])
 def get_tasks(page=1):
     if request.method == "GET":
+        print(request.args.get('min_created_at'))
         min_created_at = request.args.get('min_created_at')
         if min_created_at == None:
             created_after = datetime.strptime("1990-09-30 12:34:33", "%Y-%m-%d %H:%M:%S")
