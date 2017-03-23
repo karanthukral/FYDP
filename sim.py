@@ -2,6 +2,7 @@ import pickle
 import os
 import random
 import time
+import pickle as pkl
 
 from datetime import datetime
 import psycopg2
@@ -45,14 +46,22 @@ def insert(cursor, values):
 
 def make_model():
 
-    print('Beginning model training...')
-    start = time.time()
     X = np.load(os.path.join(DATA_DIR, 'features-new.npy'))
-    y = np.load(os.path.join(DATA_DIR, 'labels-new.npy'))[0]
+    try:
+        print("Looking for pre-trained model...")
+        with open(os.path.join(DATA_DIR, 'my_dumped_classifier.pkl'), 'rb') as fid:
+        clf = pkl.load(fid)
+        print("Loaded.")
+    except:
+        print('Not Found. Beginning model training...')
+        start = time.time()
+        y = np.load(os.path.join(DATA_DIR, 'labels-new.npy'))[0]
 
-    clf = RandomForestClassifier(n_estimators=25, n_jobs=-1)
-    clf.fit(X, y)
-    print('Model training done, took {} seconds'.format(time.time()-start))
+        clf = RandomForestClassifier(n_estimators=25, n_jobs=-1)
+        clf.fit(X, y)
+        with open(os.path.join(DATA_DIR, 'my_dumped_classifier.pkl'), 'wb') as fid:
+            pkl.dump(clf, fid)
+        print('Model training done, took {} seconds'.format(time.time()-start))
     return [clf, X]
 
 
