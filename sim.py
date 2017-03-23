@@ -50,7 +50,7 @@ def make_model():
     X = np.load(os.path.join(DATA_DIR, 'features-new.npy'))
     y = np.load(os.path.join(DATA_DIR, 'labels-new.npy'))[0]
 
-    clf = RandomForestClassifier(n_estimators=2, n_jobs=-1)
+    clf = RandomForestClassifier(n_estimators=25, n_jobs=-1)
     clf.fit(X, y)
     print('Model training done, took {} seconds'.format(time.time()-start))
     return [clf, X]
@@ -64,6 +64,8 @@ def iterate(clf, X, cursor, conn):
     full_db_data = pickle.load(
         open(os.path.join(DATA_DIR, 'flow-for-db.pkl'), 'rb'))
     for idx, data in enumerate(X):
+        if idx < 11400:
+            continue
         tag = classify(clf, [data])
         db_datum = full_db_data[idx]
         db_datum.append(tag)
