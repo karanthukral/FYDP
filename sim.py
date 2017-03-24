@@ -50,7 +50,7 @@ def make_model():
     try:
         print("Looking for pre-trained model...")
         with open(os.path.join(DATA_DIR, 'my_dumped_classifier.pkl'), 'rb') as fid:
-        clf = pkl.load(fid)
+            clf = pkl.load(fid)
         print("Loaded.")
     except:
         print('Not Found. Beginning model training...')
