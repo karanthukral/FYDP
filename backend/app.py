@@ -24,13 +24,19 @@ def get_tasks(page=1):
     if request.method == "GET":
         print(request.args.get('min_created_at'))
         min_created_at = request.args.get('min_created_at')
+        max_created_at = request.args.get('max_created_at')
         if min_created_at == None:
             created_after = datetime.strptime("1990-09-30 12:34:33", "%Y-%m-%d %H:%M:%S")
         else:
             created_after = datetime.strptime(min_created_at, "%Y-%m-%d %H:%M:%S")
 
+        if max_created_at == None:
+            created_before = datetime.strptime("2020-09-30 12:34:33", "%Y-%m-%d %H:%M:%S")
+        else:
+            created_before = datetime.strptime(max_created_at, "%Y-%m-%d %H:%M:%S")
+
         traffic = Traffic.query.filter(Traffic.created_at >
-                created_after).order_by(Traffic.created_at).paginate(page,
+                created_after).filter(Traffic.created_at < created_before).order_by(Traffic.created_at).paginate(page,
                         ITEMS_PER_PAGE, False)
 
 
