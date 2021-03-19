@@ -10,7 +10,7 @@ daphne==0.15.0
 decorator==4.0.10
 Django==1.10.2
 django-extensions==1.7.4
-djangorestframework==3.5.1
+djangorestframework==3.11.2
 elasticsearch==5.1.0
 entrypoints==0.2.2
 flake8==3.0.4
